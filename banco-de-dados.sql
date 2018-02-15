@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `delivery` /*!40100 DEFAULT CHARACTER SET latin1 
 USE `delivery`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: 192.168.1.8    Database: delivery
+-- Host: 192.168.1.9    Database: delivery
 -- ------------------------------------------------------
 -- Server version	5.7.21-0ubuntu0.16.04.1
 
@@ -266,12 +266,9 @@ CREATE TABLE `usuario` (
   `token` varchar(255) DEFAULT NULL COMMENT 'Token do usuario\n',
   `tipo` varchar(45) NOT NULL DEFAULT 'FUNCIONARIO' COMMENT 'TIPO do usuario\n\nFUNCIONARIO = Funcionario do estabelecimento. Possui poucas permissoes\nADM_ESTABELECIMENTO = Pode realizar todas as funções e tirar relatórios\nADM_SISTEMA = Controle total do sistema',
   `email` varchar(100) NOT NULL COMMENT 'email do usuario',
-  `id_estabelecimento` int(11) DEFAULT NULL COMMENT 'referencia ao estabelecimento que o usuario pertence',
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_UNIQUE` (`login`),
-  UNIQUE KEY `token_UNIQUE` (`token`),
-  KEY `fk_estabelecimento_usuario_idx` (`id_estabelecimento`),
-  CONSTRAINT `fk_estabelecimento_usuario` FOREIGN KEY (`id_estabelecimento`) REFERENCES `estabelecimento` (`id`)
+  UNIQUE KEY `token_UNIQUE` (`token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -281,8 +278,34 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'Messias Lima','messais','123','123','ADM_SISTEMA','messias@messias.com',NULL),(2,'Messias Lima','messias','messias123',NULL,'ADM_SISTEMA','messiaslima@gmail.com',1),(6,'Messias Lima','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','d3aa05b0e48d863837816f7ab34e8581','ADM_SISTEMA','messiaslima@gmail.com',1);
+INSERT INTO `usuario` VALUES (1,'Messias Lima','messais','123','123','ADM_SISTEMA','messias@messias.com'),(2,'Messias Lima','messias','messias123',NULL,'ADM_SISTEMA','messiaslima@gmail.com'),(6,'Messias Lima','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','e8c7a891b2eb81528d8e344c54ada012','ADM_SISTEMA','messiaslima@gmail.com');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `usuario_estabelecimento`
+--
+
+DROP TABLE IF EXISTS `usuario_estabelecimento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `usuario_estabelecimento` (
+  `id_usuario` int(11) NOT NULL,
+  `id_estabelecimento` int(11) NOT NULL,
+  KEY `fk_usuario_estabelecimento_idx` (`id_usuario`),
+  KEY `fk_estabelecimento_usuario_idx` (`id_estabelecimento`),
+  CONSTRAINT `fk_estabelecimento_usuario` FOREIGN KEY (`id_estabelecimento`) REFERENCES `estabelecimento` (`id`),
+  CONSTRAINT `fk_usuario_estabelecimento` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `usuario_estabelecimento`
+--
+
+LOCK TABLES `usuario_estabelecimento` WRITE;
+/*!40000 ALTER TABLE `usuario_estabelecimento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `usuario_estabelecimento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -294,4 +317,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-10 15:16:07
+-- Dump completed on 2018-02-14 23:41:18
