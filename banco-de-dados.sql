@@ -29,7 +29,7 @@ CREATE TABLE `cidade` (
   `nome` varchar(100) NOT NULL COMMENT 'nome da cidade',
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome_UNIQUE` (`nome`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `cidade` (
 
 LOCK TABLES `cidade` WRITE;
 /*!40000 ALTER TABLE `cidade` DISABLE KEYS */;
-INSERT INTO `cidade` VALUES (1,'Pacajus');
+INSERT INTO `cidade` VALUES (14,'Berberibe'),(15,'Cascavel'),(5,'Fortaleza'),(2,'Horizonte'),(1,'Pacajus');
 /*!40000 ALTER TABLE `cidade` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,6 +84,7 @@ CREATE TABLE `estabelecimento` (
   `latitude` double DEFAULT NULL COMMENT 'Latitude do estabelecimento',
   `longitude` double DEFAULT NULL COMMENT 'Logitude do estabelecimento',
   `id_cidade` int(11) NOT NULL COMMENT 'Referência da cidade do estabelecimento',
+  `url_image` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `cidade_fk_idx` (`id_cidade`),
   CONSTRAINT `cidade_fk` FOREIGN KEY (`id_cidade`) REFERENCES `cidade` (`id`)
@@ -96,7 +97,7 @@ CREATE TABLE `estabelecimento` (
 
 LOCK TABLES `estabelecimento` WRITE;
 /*!40000 ALTER TABLE `estabelecimento` DISABLE KEYS */;
-INSERT INTO `estabelecimento` VALUES (1,'Nhok Lu','Pizzas e Massas','ATIVO',-4.172941,-38.468277,1);
+INSERT INTO `estabelecimento` VALUES (1,'Nhok Lu','Pizzas e Massas','ATIVO',-4.172941,-38.468277,1,NULL);
 /*!40000 ALTER TABLE `estabelecimento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,7 +270,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_UNIQUE` (`login`),
   UNIQUE KEY `token_UNIQUE` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -278,7 +279,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'Messias Lima','messais','123','123','ADM_SISTEMA','messias@messias.com'),(2,'Messias Lima','messias','messias123',NULL,'ADM_SISTEMA','messiaslima@gmail.com'),(6,'Messias Lima','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','e8c7a891b2eb81528d8e344c54ada012','ADM_SISTEMA','messiaslima@gmail.com');
+INSERT INTO `usuario` VALUES (1,'Messias Lima','messais','123','123','ADM_SISTEMA','messias@messias.com'),(2,'Messias Lima','messias','messias123',NULL,'ADM_SISTEMA','messiaslima@gmail.com'),(6,'Messias Lima','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','aa6a42810dac69c9e4495c96685aecee','ADM_SISTEMA','messiaslima@gmail.com');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,4 +318,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-14 23:41:18
+-- Dump completed on 2018-02-15 22:22:32
