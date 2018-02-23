@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `delivery` /*!40100 DEFAULT CHARACTER SET latin1 
 USE `delivery`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: 192.168.1.9    Database: delivery
+-- Host: 192.168.1.7    Database: delivery
 -- ------------------------------------------------------
 -- Server version	5.7.21-0ubuntu0.16.04.1
 
@@ -29,7 +29,7 @@ CREATE TABLE `cidade` (
   `nome` varchar(100) NOT NULL COMMENT 'nome da cidade',
   PRIMARY KEY (`id`),
   UNIQUE KEY `nome_UNIQUE` (`nome`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `cidade` (
 
 LOCK TABLES `cidade` WRITE;
 /*!40000 ALTER TABLE `cidade` DISABLE KEYS */;
-INSERT INTO `cidade` VALUES (14,'Berberibe'),(15,'Cascavel'),(5,'Fortaleza'),(2,'Horizonte'),(1,'Pacajus');
+INSERT INTO `cidade` VALUES (15,'Cascavel'),(5,'Fortaleza'),(2,'Horizonte'),(1,'Pacajus');
 /*!40000 ALTER TABLE `cidade` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +84,7 @@ CREATE TABLE `estabelecimento` (
   `latitude` double DEFAULT NULL COMMENT 'Latitude do estabelecimento',
   `longitude` double DEFAULT NULL COMMENT 'Logitude do estabelecimento',
   `id_cidade` int(11) NOT NULL COMMENT 'Referência da cidade do estabelecimento',
-  `url_image` varchar(255) DEFAULT NULL,
+  `url_image` longtext,
   PRIMARY KEY (`id`),
   KEY `cidade_fk_idx` (`id_cidade`),
   CONSTRAINT `cidade_fk` FOREIGN KEY (`id_cidade`) REFERENCES `cidade` (`id`)
@@ -97,7 +97,7 @@ CREATE TABLE `estabelecimento` (
 
 LOCK TABLES `estabelecimento` WRITE;
 /*!40000 ALTER TABLE `estabelecimento` DISABLE KEYS */;
-INSERT INTO `estabelecimento` VALUES (1,'Nhok Lu','Pizzas e Massas','ATIVO',-4.172941,-38.468277,1,NULL);
+INSERT INTO `estabelecimento` VALUES (1,'Sombra da Mangueira','teste','ATIVO',-4.172941,-38.468277,1,'https://img.stpu.com.br/?img=https://s3.amazonaws.com/pu-mgr/default/a0R0f00000v2kUkEAI/5a5ca638e4b0e5b61c4e2b40.png&w=620&h=400');
 /*!40000 ALTER TABLE `estabelecimento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -279,7 +279,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'Messias Lima','messais','123','123','ADM_SISTEMA','messias@messias.com'),(2,'Messias Lima','messias','messias123',NULL,'ADM_SISTEMA','messiaslima@gmail.com'),(6,'Messias Lima','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','aa6a42810dac69c9e4495c96685aecee','ADM_SISTEMA','messiaslima@gmail.com');
+INSERT INTO `usuario` VALUES (1,'Messias Lima','messais','123','123','ADM_SISTEMA','messias@messias.com'),(2,'Messias Lima','messias','messias123',NULL,'ADM_SISTEMA','messiaslima@gmail.com'),(6,'Messias Lima','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','c760971f8bc120d4e84410cbe8341cae','ADM_SISTEMA','messiaslima@gmail.com');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -306,6 +306,7 @@ CREATE TABLE `usuario_estabelecimento` (
 
 LOCK TABLES `usuario_estabelecimento` WRITE;
 /*!40000 ALTER TABLE `usuario_estabelecimento` DISABLE KEYS */;
+INSERT INTO `usuario_estabelecimento` VALUES (6,1);
 /*!40000 ALTER TABLE `usuario_estabelecimento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -318,4 +319,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-15 22:22:32
+-- Dump completed on 2018-02-23 19:26:08
