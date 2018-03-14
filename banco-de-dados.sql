@@ -1,8 +1,8 @@
 CREATE DATABASE  IF NOT EXISTS `delivery` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `delivery`;
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
 --
--- Host: 192.168.1.7    Database: delivery
+-- Host: localhost    Database: delivery
 -- ------------------------------------------------------
 -- Server version	5.7.21-0ubuntu0.16.04.1
 
@@ -88,7 +88,7 @@ CREATE TABLE `estabelecimento` (
   PRIMARY KEY (`id`),
   KEY `cidade_fk_idx` (`id_cidade`),
   CONSTRAINT `cidade_fk` FOREIGN KEY (`id_cidade`) REFERENCES `cidade` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,7 +97,7 @@ CREATE TABLE `estabelecimento` (
 
 LOCK TABLES `estabelecimento` WRITE;
 /*!40000 ALTER TABLE `estabelecimento` DISABLE KEYS */;
-INSERT INTO `estabelecimento` VALUES (1,'Sombra da Mangueira','teste','ATIVO',-4.172941,-38.468277,1,'https://img.stpu.com.br/?img=https://s3.amazonaws.com/pu-mgr/default/a0R0f00000v2kUkEAI/5a5ca638e4b0e5b61c4e2b40.png&w=620&h=400');
+INSERT INTO `estabelecimento` VALUES (1,'Sombra da Mangueira','Descrição do estabelecimento','ATIVO',-4.172941,-38.468277,1,'3564314a-fcea-4943-8271-cb989b6ba441.jpg'),(2,'Jacks Pub','Descricao jacks','ATIVO',NULL,NULL,2,NULL),(3,'2\'','2','ATIVO',NULL,NULL,2,NULL),(4,'3','3','ATIVO',NULL,NULL,2,NULL),(5,'Sdf','Asf','ATIVO',NULL,NULL,5,NULL),(6,'Hhh','Ajjs','ATIVO',NULL,NULL,2,NULL),(7,'Hueheu','Heuehej','ATIVO',NULL,NULL,2,'502aad46d4cd3c6b365b36630f413175.png'),(8,'Hueheu','Heuehej','ATIVO',NULL,NULL,2,'8f8428842c401144483fd22e2c423982.png'),(9,'Dona Conceiçao','Pratinho rocheda','ATIVO',NULL,NULL,1,NULL),(10,'Naldo','Naldp','ATIVO',NULL,NULL,5,'5629ffc2ec20297ef61d6b6f360afcb9.png'),(11,'Naldo 2','Naldo 3','ATIVO',NULL,NULL,2,NULL);
 /*!40000 ALTER TABLE `estabelecimento` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -110,22 +110,15 @@ DROP TABLE IF EXISTS `pedido`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pedido` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador do pedido',
-  `id_produto` int(11) NOT NULL COMMENT 'FK do produto',
   `id_cliente` int(11) NOT NULL COMMENT 'FK do cliente',
   `id_estabelecimento` int(11) NOT NULL,
-  `id_tipo_status` int(11) NOT NULL DEFAULT '1' COMMENT 'estado atual do pedido',
-  `quantidade_produto` int(11) NOT NULL DEFAULT '1' COMMENT 'Quantidade do produto comprado',
-  `preco_unitario` float NOT NULL COMMENT 'Valor unitario do produto\n\nEsse é o valor do produto na hora da compra.\n\nCaso o estabelecimento mude o valor, eu anda terei o valor da compra',
-  `preco_final` float NOT NULL COMMENT 'Preço final do pedido',
+  `preco` float NOT NULL COMMENT 'Preço final do pedido',
+  `data` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_tipo_status_idx` (`id_tipo_status`),
-  KEY `fk_produto_idx` (`id_produto`),
   KEY `fk_cliente_idx` (`id_cliente`),
   KEY `fk_estabelecimento_pedido_idx` (`id_estabelecimento`),
   CONSTRAINT `fk_cliente` FOREIGN KEY (`id_cliente`) REFERENCES `cliente` (`id`),
-  CONSTRAINT `fk_estabelecimento_pedido` FOREIGN KEY (`id_estabelecimento`) REFERENCES `estabelecimento` (`id`),
-  CONSTRAINT `fk_produto` FOREIGN KEY (`id_produto`) REFERENCES `produto` (`id`),
-  CONSTRAINT `fk_tipo_status` FOREIGN KEY (`id_tipo_status`) REFERENCES `tipo_status_pedido` (`id`)
+  CONSTRAINT `fk_estabelecimento_pedido` FOREIGN KEY (`id_estabelecimento`) REFERENCES `estabelecimento` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -139,6 +132,33 @@ LOCK TABLES `pedido` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `pedido_item`
+--
+
+DROP TABLE IF EXISTS `pedido_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pedido_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_produto` int(11) NOT NULL,
+  `id_pedido` int(11) NOT NULL,
+  `quantidade` int(11) NOT NULL,
+  `valor_unitario` float NOT NULL,
+  `valor_total` float NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pedido_item`
+--
+
+LOCK TABLES `pedido_item` WRITE;
+/*!40000 ALTER TABLE `pedido_item` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pedido_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `pedido_status`
 --
 
@@ -148,16 +168,14 @@ DROP TABLE IF EXISTS `pedido_status`;
 CREATE TABLE `pedido_status` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador',
   `id_pedido` int(11) NOT NULL COMMENT 'Id do pedido ao qual esse status se refere',
-  `id_tipo_status_pedido` int(11) NOT NULL COMMENT 'qual o tipo do status',
   `id_usuario` int(11) NOT NULL COMMENT 'Qual o usuario que realizou a mudança de status',
+  `tipo_status` varchar(45) NOT NULL COMMENT 'AGUARDANDO_APROVACAO\nACEITO\nEM_ANDAMENTO\nCANCELADO_CLIENTE\nCANCELADO_ESTABELECIMENTO\nRECUSADO',
   `data_hora` datetime NOT NULL COMMENT 'timestamp no qual foi realizado a mudança',
   `observacao` varchar(255) DEFAULT NULL COMMENT 'Messagem dessa mudança',
   PRIMARY KEY (`id`),
   KEY `fk_pedido_idx` (`id_pedido`),
-  KEY `fk_tipo_pedido_status_idx` (`id_tipo_status_pedido`),
   KEY `fk_usuario_pedido_idx` (`id_usuario`),
   CONSTRAINT `fk_pedido` FOREIGN KEY (`id_pedido`) REFERENCES `pedido` (`id`),
-  CONSTRAINT `fk_tipo_pedido_status` FOREIGN KEY (`id_tipo_status_pedido`) REFERENCES `tipo_status_pedido` (`id`),
   CONSTRAINT `fk_usuario_pedido` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -229,30 +247,6 @@ INSERT INTO `tipo_produto` VALUES (1,'Pizza');
 UNLOCK TABLES;
 
 --
--- Table structure for table `tipo_status_pedido`
---
-
-DROP TABLE IF EXISTS `tipo_status_pedido`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `tipo_status_pedido` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador',
-  `nome` varchar(45) NOT NULL COMMENT 'Estado do pedido\n\nAGUARDANDO_APROVACAO        = Aguarndando aprovação do estabelecimento\nACEITO                                          = Aceito pelo estabelecimento\nEM_ANDAMENTO                           = Pedido sendo feiro\nCANCELADO_CLIENTE                   = Cancelado pelo cliente\nCANCELADO_ESTABELECIMENTO = Cancelado pelo estabelecimento',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tipo_status_pedido`
---
-
-LOCK TABLES `tipo_status_pedido` WRITE;
-/*!40000 ALTER TABLE `tipo_status_pedido` DISABLE KEYS */;
-INSERT INTO `tipo_status_pedido` VALUES (1,'AGUARDANDO_APROVACAO'),(2,'ACEITO'),(3,'EM_ANDAMENTO'),(4,'CANCELADO_CLIENTE'),(5,'CANCELADO_ESTABELECIMENTO'),(6,'RECUSADO');
-/*!40000 ALTER TABLE `tipo_status_pedido` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `usuario`
 --
 
@@ -270,7 +264,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `login_UNIQUE` (`login`),
   UNIQUE KEY `token_UNIQUE` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -279,7 +273,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (1,'Messias Lima','messais','123','123','ADM_SISTEMA','messias@messias.com'),(2,'Messias Lima','messias','messias123',NULL,'ADM_SISTEMA','messiaslima@gmail.com'),(6,'Messias Lima','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','c760971f8bc120d4e84410cbe8341cae','ADM_SISTEMA','messiaslima@gmail.com');
+INSERT INTO `usuario` VALUES (6,'Messias Lima da Silva','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','7b154d90e502da0b6e9063b476ff0257','ADM_SISTEMA','messiaslima@gmail.com'),(9,'gerente','gerente','740d9c49b11f3ada7b9112614a54be41','fa7f4d2f3aa854e288bff8cba2d31fe8','ADM_ESTABELECIMENTO','gerente@asd.com'),(10,'funcionario','funcionario','cc7a84634199040d54376793842fe035','41573173a08a75a51cfa176c82e5b621','FUNCIONARIO','funcionrio@das.asd');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -306,7 +300,7 @@ CREATE TABLE `usuario_estabelecimento` (
 
 LOCK TABLES `usuario_estabelecimento` WRITE;
 /*!40000 ALTER TABLE `usuario_estabelecimento` DISABLE KEYS */;
-INSERT INTO `usuario_estabelecimento` VALUES (6,1);
+INSERT INTO `usuario_estabelecimento` VALUES (9,1),(10,1);
 /*!40000 ALTER TABLE `usuario_estabelecimento` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -319,4 +313,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-23 19:26:08
+-- Dump completed on 2018-03-13 21:42:03
