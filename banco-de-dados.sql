@@ -1,10 +1,10 @@
 CREATE DATABASE  IF NOT EXISTS `delivery` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `delivery`;
--- MySQL dump 10.13  Distrib 5.7.21, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.22, for Linux (x86_64)
 --
 -- Host: localhost    Database: delivery
 -- ------------------------------------------------------
--- Server version	5.7.21-0ubuntu0.16.04.1
+-- Server version	5.7.22-0ubuntu0.16.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -99,6 +99,57 @@ LOCK TABLES `estabelecimento` WRITE;
 /*!40000 ALTER TABLE `estabelecimento` DISABLE KEYS */;
 INSERT INTO `estabelecimento` VALUES (1,'Sombra da Mangueira','Descrição do estabelecimento','ATIVO',-4.172941,-38.468277,1,'9e3eaeea-3ae8-449b-809e-22aae1876e04.jpg'),(2,'Jacks Pub','Descricao jacks','ATIVO',NULL,NULL,2,NULL),(3,'2\'','2','ATIVO',NULL,NULL,2,NULL),(4,'3 irmãos','Campo de futebol Society e churrascaria','ATIVO',NULL,NULL,1,NULL),(5,'Sdf','Asf','ATIVO',NULL,NULL,5,NULL),(6,'Hhh','Ajjs','ATIVO',NULL,NULL,2,NULL),(7,'Hueheu','Heuehej','ATIVO',NULL,NULL,2,'502aad46d4cd3c6b365b36630f413175.png'),(8,'Hueheu','Heuehej','ATIVO',NULL,NULL,2,'8f8428842c401144483fd22e2c423982.png'),(9,'Dona Conceiçao','Pratinho rocheda','ATIVO',NULL,NULL,1,NULL),(10,'Naldo','Naldp','ATIVO',NULL,NULL,5,'5629ffc2ec20297ef61d6b6f360afcb9.png'),(11,'Naldo 2','Naldo 3','ATIVO',NULL,NULL,2,NULL);
 /*!40000 ALTER TABLE `estabelecimento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `estabelecimento_forma_pagamento`
+--
+
+DROP TABLE IF EXISTS `estabelecimento_forma_pagamento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `estabelecimento_forma_pagamento` (
+  `id_estabelecimento` int(11) NOT NULL,
+  `id_forma_pagamento` int(11) NOT NULL,
+  PRIMARY KEY (`id_estabelecimento`,`id_forma_pagamento`),
+  KEY `fk_forma_pagamento_idx` (`id_forma_pagamento`),
+  CONSTRAINT `fk_estabelecimento_forma_pagamento` FOREIGN KEY (`id_estabelecimento`) REFERENCES `estabelecimento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_forma_pagamento_estabelecimento` FOREIGN KEY (`id_forma_pagamento`) REFERENCES `forma_pagamento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `estabelecimento_forma_pagamento`
+--
+
+LOCK TABLES `estabelecimento_forma_pagamento` WRITE;
+/*!40000 ALTER TABLE `estabelecimento_forma_pagamento` DISABLE KEYS */;
+/*!40000 ALTER TABLE `estabelecimento_forma_pagamento` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `forma_pagamento`
+--
+
+DROP TABLE IF EXISTS `forma_pagamento`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forma_pagamento` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nome_UNIQUE` (`nome`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forma_pagamento`
+--
+
+LOCK TABLES `forma_pagamento` WRITE;
+/*!40000 ALTER TABLE `forma_pagamento` DISABLE KEYS */;
+INSERT INTO `forma_pagamento` VALUES (4,'Alelo'),(1,'Dinheiro'),(3,'Master Card'),(5,'Sodexo'),(2,'Visa');
+/*!40000 ALTER TABLE `forma_pagamento` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -209,7 +260,7 @@ CREATE TABLE `produto` (
   KEY `fk_tipo_produto_idx` (`id_tipo`),
   CONSTRAINT `fk_estabelecimento` FOREIGN KEY (`id_estabelecimento`) REFERENCES `estabelecimento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_tipo_produto` FOREIGN KEY (`id_tipo`) REFERENCES `tipo_produto` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -218,7 +269,7 @@ CREATE TABLE `produto` (
 
 LOCK TABLES `produto` WRITE;
 /*!40000 ALTER TABLE `produto` DISABLE KEYS */;
-INSERT INTO `produto` VALUES (1,'Pizza de Calabresa','Calabresa, Mussarela, Orégano',1,1,23.9,NULL),(2,'Pizza de Muçarela','Mussarela, Orégano',1,1,23.9,NULL),(3,'Pizza de Muçarela','Mussarela, Orégano',2,1,25.9,NULL),(4,'Pizza de Camarão','Camarão, Orégano',3,1,25.9,NULL);
+INSERT INTO `produto` VALUES (1,'Pizza de Calabresa','Calabresa, Mussarela, Orégano',1,1,23.9,NULL),(2,'Pizza de Muçarela','Mussarela, Orégano',1,1,23.9,NULL),(3,'Pizza de Muçarela','Mussarela, Orégano',2,1,25.9,NULL),(4,'Pizza de Camarão','Camarão, Orégano',3,1,25.9,NULL),(5,'Sanduiche','Pao e carne',1,1,12,NULL),(6,'Coca cola','Refrigerante de cola',1,2,10,NULL),(7,'Frango à parmegiana para 2 pessoas','Frango, queijo, molho de tomate e porção de arroz branco.',1,3,10,'6e95c53a-a83e-4610-8a24-0e2af7465648.jpg');
 /*!40000 ALTER TABLE `produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,7 +287,7 @@ CREATE TABLE `tipo_produto` (
   PRIMARY KEY (`id`),
   KEY `fk_tipo_produto_1_idx` (`id_estabelecimento`),
   CONSTRAINT `fk_tipo_produto_1` FOREIGN KEY (`id_estabelecimento`) REFERENCES `estabelecimento` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -245,7 +296,7 @@ CREATE TABLE `tipo_produto` (
 
 LOCK TABLES `tipo_produto` WRITE;
 /*!40000 ALTER TABLE `tipo_produto` DISABLE KEYS */;
-INSERT INTO `tipo_produto` VALUES (1,'Pizza',1),(2,'Bebida',1);
+INSERT INTO `tipo_produto` VALUES (1,'Pizzas',1),(2,'Bebida',1),(3,'Massa',1);
 /*!40000 ALTER TABLE `tipo_produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -276,7 +327,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (6,'Messias Lima da Silva Junior','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','e4001dd415bca55551c462e7c320237d','ADM_SISTEMA','messiaslima@gmail.com'),(9,'gerente','gerente','740d9c49b11f3ada7b9112614a54be41','a08a131cba7b9ec84aa452d51e56cea2','ADM_ESTABELECIMENTO','gerente@asd.com'),(10,'funcionario','funcionario','cc7a84634199040d54376793842fe035','41573173a08a75a51cfa176c82e5b621','FUNCIONARIO','funcionario@gmail.com');
+INSERT INTO `usuario` VALUES (6,'Messias Lima da Silva Junior','messiaslima','ed2a6aa572f724c6d7c491df4de0329f','70c858ebfca943b55cadbd03d27d0aa3','ADM_SISTEMA','messiaslima@gmail.com'),(9,'gerente','gerente','740d9c49b11f3ada7b9112614a54be41','48e86756483dde6811d264c38800b887','ADM_ESTABELECIMENTO','gerente@asd.com'),(10,'funcionario','funcionario','cc7a84634199040d54376793842fe035','41573173a08a75a51cfa176c82e5b621','FUNCIONARIO','funcionario@gmail.com');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -316,4 +367,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-04 21:47:59
+-- Dump completed on 2018-04-30 20:40:55
