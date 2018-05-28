@@ -56,8 +56,9 @@ CREATE TABLE `cliente` (
   `identificador_externo` varchar(255) NOT NULL COMMENT 'Identificador do sistema externo\n\nEx: id de usuario do facebook ou email do google por exemplo',
   `email` varchar(200) DEFAULT NULL COMMENT 'Email do cliente',
   `token` varchar(45) DEFAULT NULL COMMENT 'Token que identifica a sessao do usuario',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `identificador_externo_UNIQUE` (`identificador_externo`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,6 +67,7 @@ CREATE TABLE `cliente` (
 
 LOCK TABLES `cliente` WRITE;
 /*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
+INSERT INTO `cliente` VALUES (1,'Messias Lima','0','asdgasdghasjdgasj2k34jh2k34h2j3kh4k2',NULL,NULL),(2,'Messias Lima','0','ydyug',NULL,NULL);
 /*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -367,4 +369,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-04-30 20:40:55
+-- Dump completed on 2018-05-28 14:33:54
